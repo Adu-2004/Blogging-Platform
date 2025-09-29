@@ -1,0 +1,21 @@
+.blog-category-section {
+    margin-top: 1rem;
+  }
+  
+  @media (max-width: 480px) {
+    .blog-category-section {
+      margin-top: 4rem;
+    }
+  }
+  
+  @media (min-width: 481px) and (max-width: 640px) {
+    .blog-category-section {
+      margin-top: 3rem;
+    }
+  }
+  
+  @media (min-width: 641px) {
+    .blog-category-section {
+      margin-top: 1rem;
+    }
+  }
