@@ -200,10 +200,6 @@ export const togglePublish = async (req, res) => {
 export const addComment = async (req, res) => {
   try{
        const { blog, name, content } = req.body;
-        if (!name || !content) {
-        return res.status(400).json({ success: false, message: 'Name and content are required' });
-      }
-      
        await Comment .create({blog, name, content});
         res.json({success: true, message:"Comment added for review"})
   }catch(error){
@@ -214,8 +210,8 @@ export const addComment = async (req, res) => {
 export const getBlogComments = async (req, res) => {
   try {
       const {blogId} = req.body;
-    //  const comments = await Comment.find({blog: blogId, isApproved: true}).sort({createAt: -1});
-    const comments = await Comment.find().populate({ path: 'author', strictPopulate: false });
+      const comments = await Comment.find({blog: blogId, isApproved: true}).sort({createAt: -1});
+  //  const comments = await Comment.find().populate({ path: 'author', strictPopulate: false });
 
       res.json({success: true, comments})
   } catch (error) {
