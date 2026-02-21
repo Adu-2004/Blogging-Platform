@@ -47,11 +47,24 @@ const Comment = () => {
                     </tr>
                   </thead>
                   <tbody>
-                       {comments.filter((comment) => {
-                                if(filter === "Approved") return comment.isApproved === true;
-                                return comment.isApproved === false;
-                       }).map((comment, index) => <CommentTableItem key={comment._id} comment={comment} index={index + 1} fetchComments={fetchComments}/>)}
-                  </tbody>
+  {comments.filter((comment) => {
+      if(filter === "Approved") return comment.isApproved === true;
+      return comment.isApproved === false;
+  }).length === 0 
+  ? (
+    <tr>
+      <td colSpan="3" className="px-6 py-10 text-center text-gray-400 text-sm">
+        💬 No {filter.toLowerCase()} comments yet
+      </td>
+    </tr>
+  ) 
+  : comments.filter((comment) => {
+      if(filter === "Approved") return comment.isApproved === true;
+      return comment.isApproved === false;
+  }).map((comment, index) => (
+    <CommentTableItem key={comment._id} comment={comment} index={index + 1} fetchComments={fetchComments}/>
+  ))}
+</tbody>
               </table>
             </div>
     </div>

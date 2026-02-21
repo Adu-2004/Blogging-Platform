@@ -11,7 +11,7 @@ const ListBlog = () => {
 
    const fetchBlogs = async () => {
          try {
-              const {data} = await axios.get('/api/admin/blogs')
+              const {data} = await axios.get('/api/blog/my-blogs')
               if(data.success){
                 setBlogs(data.blogs)
               }else{
@@ -42,9 +42,21 @@ const ListBlog = () => {
                          </tr>
                   </thead>
                   <tbody>
-                    {blogs.map((blog, index) => {
-                            return <BlogTableItem key={blog._id} blog={blog} fetchBlogs={fetchBlogs} index={index + 1}/>
-                    })}
+                    {blogs.length === 0 ? (
+                      <tr>
+                        <td colSpan="5" className='text-center py-16 text-gray-400'>
+                          <div className='flex flex-col items-center gap-2'>
+                            <span className='text-4xl'>📝</span>
+                            <p className='text-lg font-medium'>No blogs yet!</p>
+                            <p className='text-sm'>Start writing your first blog and share your thoughts with the world.</p>
+                          </div>
+                        </td>
+                      </tr>
+                    ) : (
+                      blogs.map((blog, index) => (
+                        <BlogTableItem key={blog._id} blog={blog} fetchBlogs={fetchBlogs} index={index + 1}/>
+                      ))
+                    )}
                   </tbody>
                 </table>
           </div>

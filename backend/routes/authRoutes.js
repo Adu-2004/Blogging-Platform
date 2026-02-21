@@ -1,15 +1,5 @@
-// const express = require('express');
-// const { register, login } = require('../controllers/authController');
-// const router = express.Router();
-
-// router.post('/register', register);
-// router.post('/login', login);
-
-// module.exports = router;
-
 import express from 'express';
 import { register, login } from '../controllers/authController.js';
-//import auth from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
@@ -20,3 +10,4 @@ router.get('/admin-only', login, (req, res) => {
 });
 
 export default router;
+

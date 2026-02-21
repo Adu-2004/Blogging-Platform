@@ -1,32 +1,11 @@
-/*import React from 'react'
-import Navbar from '../components/Navbar'
-import Header from '../components/Header'
-import BlogList from '../components/BlogList'
-import Newsletter from '../components/Newsletter'
-import Footer from '../components/Footer'
-import { MyComponent } from '../components/MyComponent'
-const Home = () => {
-  return (
-    <>
-      <Navbar/>
-      <Header/>
-      <BlogList/>
-      <Newsletter/>
-      <Footer/>
-      <MyComponent/>
-    </>
-  )
-}
-
-export default Home
-*/
 import React from 'react'
 import Navbar from '../components/Navbar'
 import Header from '../components/Header'
 import BlogList from '../components/BlogList'
 import Newsletter from '../components/Newsletter'
 import Footer from '../components/Footer'
-import MyChatbot from '../components/MyChatbot'
+
+import BlogBotChatbot from '../components/Blogbotchatbot'
 
 const Home = () => {
   return (
@@ -51,7 +30,7 @@ const Home = () => {
         <BlogList />
         <Newsletter />
         <Footer />
-        <MyChatbot />
+        <BlogBotChatbot />
       </div>
     </div>
   )

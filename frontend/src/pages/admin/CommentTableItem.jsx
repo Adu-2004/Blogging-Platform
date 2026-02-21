@@ -44,12 +44,12 @@ const CommentTableItem = ({comment, fetchComments}) => {
 
 
     return (
-    <tr className='order-y border-gray-300'>
+    <tr className='border-y border-gray-300'>
       <td className='px-6 py-4'>
         <b className='font-medium text-gray-600'>Blog</b> : {blog.title}
           <br/>
           <br/>
-          <b className='font-medium text-gray-600'>Name</b> : {comment.name}
+          <b className='font-medium text-gray-600'>Name</b> : {comment.userId?.name}
           <br/>
           <b className='font-medium text-gray-600'>Comment</b> : {comment.content}
       </td>
@@ -70,3 +70,4 @@ const CommentTableItem = ({comment, fetchComments}) => {
 }
 
 export default CommentTableItem
+

@@ -24,7 +24,7 @@ const authHeader = async (req, res, next) => {
             }
         }
         
-        req.user = decoded;
+        req.user = decoded.userId;
         next();
     } catch (error) {
         res.status(403).json({

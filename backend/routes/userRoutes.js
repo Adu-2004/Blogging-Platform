@@ -18,7 +18,7 @@ userRouter.post('/signup', userSignup);
 userRouter.post('/login', userLogin);
 
 // Protected routes
-userRouter.get('/dashboard', auth, getUserDashboard);
+userRouter.get('/dashboard', auth,getUserDashboard);
 userRouter.get('/blogs', auth, getUserBlogs);
 userRouter.get('/profile', auth, getUserProfile);
 userRouter.put('/profile', auth, updateUserProfile);

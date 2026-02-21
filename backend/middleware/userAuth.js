@@ -29,7 +29,7 @@ const userAuth = async (req, res, next) => {
             });
         }
 
-        req.user = decoded;
+        req.id = decoded.userId;
         next();
     } catch (error) {
         res.status(403).json({

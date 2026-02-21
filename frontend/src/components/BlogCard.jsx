@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import Moment from 'moment'
 
 const BlogCard = ({ blog }) => {
 
@@ -28,13 +29,10 @@ const BlogCard = ({ blog }) => {
       <div className='p-5'>
         <h5 className='mb-2 font-medium text-gray-900'>{title}</h5>
         <p className='mb-3 text-xs text-gray-600' dangerouslySetInnerHTML={{ "__html": description.slice(0, 80) }}></p>
-         <button
-          onClick={handleLikeToggle}
-          className={`px-3 py-1 rounded-full text-xs font-semibold transition duration-300
-            ${isLiked ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800'}`}
-        >
-          {isLiked ? 'Unlike' : 'Like'} ({likeCount})
-        </button>
+        <div className='flex items-center justify-between border-t border-gray-105 pt-3 mt-3 text-xs text-gray-500'>
+          <p>By <span className='font-semibold text-gray-700'>{blog?.author?.name || 'Admin'}</span></p>
+          <p>{Moment(blog?.createdAt).format('MMM Do YYYY')}</p>
+        </div>
       </div>
     </div>
   )

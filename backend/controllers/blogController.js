@@ -1,63 +1,4 @@
 
-/*
-export const addBlog = async (req, res) => {
-    try{
-        const {title, subTitle, description, category, isPublished} = JSON.parse
-        (req.body.blog);
-        const imageFile = req.file;
-
-        //Check if all fields are present
-        if(!title || !description || !category || !imageFile) {
-            return res.json({success:false, message: "Missing required fields" })
-        }
-    }catch(error) {
-
-    }
-}
-    */
-
-// controllers/blogController.js
-/*
-import Blog from '../models/Blog.js';  // Adjust path as needed
-import cloudinary from '../utils/cloudinary.js'; // Your Cloudinary config file
-
-// Upload blog image and create a blog post
-export const addBlog = async (req, res) => {
-  try {
-     const {title, subTitle, description, category, isPublished} = JSON.parse(req.body.blog);
-    const imageFile = req.file;
-    if (!title || !description || !category || !imageFile) {
-      return res.status(400).json({ success:false, message: 'Image file is required' });
-    }
-
-    // Upload image to Cloudinary
-    const result = await cloudinary.uploader.upload(imageFile.path, {
-      folder: 'Blogimages',
-    });
-
-    // Create blog post in database
-    const newBlog = new Blog({
-      title: req.body.title,
-      subTitle: req.body.subTitle,
-      description: req.body.description,
-      category: req.body.category,
-      image: result.secure_url,     // Store Cloudinary URL here
-      isPublished: req.body.isPublished,
-    });
-
-    await newBlog.save();
-
-    res.status(201).json({
-      message: 'Blog post created successfully',
-      blog: newBlog,
-    });
-  } catch (error) {
-    res.status(500).json({ message: 'Failed to create blog post', error: error.message });
-  }
-};
-*/
-// Additional controllers like getPosts, updatePost etc. can be added here
-//////////////////////////////////////////////////////////////////
 import Blog from '../models/Blog.js';
 import cloudinary from '../utils/cloudinary.js';
 import Comment from '../models/Comment.js';
@@ -66,10 +7,6 @@ import main from '../utils/gemini.js';
 
 export const addBlog = async (req, res) => {
   try {
-      console.log("User from auth middleware:", req.user);
-      console.log("Author ID passed:", req.user.userId);
-
-    // Parse blog fields from JSON sent as string in req.body.blog
     const { title, subTitle, description, category, isPublished } = JSON.parse(req.body.blog);
     const imageFile = req.file;
 
@@ -81,38 +18,20 @@ export const addBlog = async (req, res) => {
     const result = await cloudinary.uploader.upload(imageFile.path, {
       folder: 'Blogimages',
     });
-
-    // Create blog post in database using destructured variables
-    const newBlog = new Blog({
-      title,
-     subTitle,
-      description,
-      category,
-      image: result.secure_url,  // Cloudinary image URL
-      isPublished,
-    //  author: req.user, //|| req.user._id,,
-    //  likes: [] 
-  /* title: req.body.title,
-      subTitle: req.body.subTitle,
-      description: req.body.description,
-      category: req.body.category,
-      image: result.secure_url,
-      isPublished: req.body.isPublished,
-      author: req.user.id, // <-- Set author here from authenticated user
-      likes: []  */
-    });
-///////////
-   /*  if (req.user && req.user.userId) {
-            blogData.author = req.user.userId;
-            blogData.authorName = req.user.name;
-        }
-*/
-/////////////
-    await newBlog.save();
-
+   const newBlog = await Blog.create({  // ADD: 'newBlog =' var
+  title,
+  subTitle,
+  description,
+  category,
+  image: result.secure_url,
+  isPublished,
+  author: req.user._id,   
+ //authorName: req.user.email.split('@')[0] || 'Admin'   // ADD: your requested author name [cite:10]
+});
+   
     res.json({
         success: true, message: 'Blog post created successfully',
-      blog: newBlog,
+       blog: newBlog,
     });
   } catch (error) {
     res.json({ success: false ,message: 'Failed to create blog post', error: error.message });
@@ -122,9 +41,9 @@ export const addBlog = async (req, res) => {
 export const getAllBlogs = async(req, res) => {
     try{
         const blogs = await Blog.find({isPublished: true})
-      //  .populate('author', 'name')
-         // .select('title subTitle description category image isPublished author authorName likesCount createdAt updatedAt')
-         //   .sort({ createdAt: -1 });
+      .populate('author', 'name')
+      .select('title subTitle description category image isPublished author authorName likesCount createdAt updatedAt')
+      .sort({ createdAt: -1 });
           const formattedBlogs = blogs.map(blog => ({
        ...blog.toObject(),
           authorName: blog.author?.name || blog.authorName || 'Admin'
@@ -133,12 +52,12 @@ export const getAllBlogs = async(req, res) => {
     }catch (error) {
           res.json({success: false, message: error.message });
     }
-}
+};
 
 export const getBlogById = async (req, res) => {
     try{
         const {blogId} = req.params;
-        const blog = await Blog.findById(blogId); //.populate('author', 'name');
+        const blog = await Blog.findById(blogId).populate('author', 'name');
         if(!blog){
            return res.json({ success:false ,message: 'Blog not found' });
         }
@@ -146,7 +65,7 @@ export const getBlogById = async (req, res) => {
     }catch (error) {
          res.json({success:false,message: error.message });
     }
-}
+};
 
 export const deleteBlogById = async (req, res) => {
     try{
@@ -173,7 +92,7 @@ export const deleteBlogById = async (req, res) => {
     }catch (error) {
          res.json({ success: false, message: error.message });
     }
-}
+};
 
 export const togglePublish = async (req, res) => {
     try{
@@ -195,29 +114,34 @@ export const togglePublish = async (req, res) => {
     }catch (error) { 
         res.json({success: false, message:error.message})
     }
-}
+};
 
 export const addComment = async (req, res) => {
   try{
-       const { blog, name, content } = req.body;
-       await Comment .create({blog, name, content});
+       const { blog, content } = req.body;
+       await Comment .create({blog, content,userId: req.user._id});
         res.json({success: true, message:"Comment added for review"})
   }catch(error){
       res.json({success: false, message:error.message})
   }
-}
+};
 
 export const getBlogComments = async (req, res) => {
   try {
-      const {blogId} = req.body;
-      const comments = await Comment.find({blog: blogId, isApproved: true}).sort({createAt: -1});
-  //  const comments = await Comment.find().populate({ path: 'author', strictPopulate: false });
+    
+      const { blogId } = req.params;
+const comments = await Comment.find({ blog: blogId, isApproved: true })
+.populate('userId', 'name') 
+.populate('replies.userId', 'name') 
+.sort({ createdAt: -1 });   
+//console.log("populated comments:", JSON.stringify(comments, null, 2));     // ✅ only fetches name
+     
 
       res.json({success: true, comments})
   } catch (error) {
     res.json({success: false, message: error.message})
   }
-}
+};
 
 export const generateContent = async (req, res) => {
     try {
@@ -227,7 +151,7 @@ export const generateContent = async (req, res) => {
     } catch (error) {
         res.json({success: false, message: error.message})
     }
-}
+};
 
 export const generateChatbot = async (req, res) => {
     try {
@@ -241,58 +165,37 @@ export const generateChatbot = async (req, res) => {
     } catch (error) {
         res.json({ success: false, message: error.message });
     }
-}
-
-/////////////////////
+};
 
 export const getBlogs = async (req, res) => {
   try {
-    const userId = req.id;
-      //const blogs = await Blog.find({ author: token }).populate('author', 'username').sort({ createdAt: -1 });
-    const blogs = await Blog.find({ author: userId }).sort({ createdAt: -1 });
+    
+    
+    // ✅ TRY ALL POSSIBLE USER ID FIELDS
+       const userId = req.user._id;
+
+    
+    if (!userId) {
+      return res.status(401).json({ success: false, message: 'Please login first - no user ID found' });
+    }
+
+    const blogs = await Blog.find({ author: userId })
+      .populate('author', 'name')
+      .sort({ createdAt: -1 });
+      
+    
     res.json({ success: true, blogs });
   } catch (error) {
+    console.log("❌ ERROR:", error.message);
     res.status(500).json({ success: false, message: error.message });
   }
 };
 
-
-
-
-
-
-/////////////////////////////////////////////
-/*
-export const deleteBlogById = async (req, res) => {
-    try {
-        const { blogId } = req.params;
-        
-        const blog = await Blog.findById(blogId);
-        if (!blog) {
-            return res.json({success: false, message: "Blog not found"});
-        }
-
-        const isAdmin = !req.user.userId; 
-        const isAuthor = req.user.userId && blog.author && blog.author.toString() === req.user.userId;
-
-        if (!isAdmin && !isAuthor) {
-            return res.json({success: false, message: "Unauthorized to delete this blog"});
-        }
-
-        await Blog.findByIdAndDelete(blogId);
-        await Comment.deleteMany({ blog: blogId });
-
-        res.json({success: true, message: "Blog deleted successfully"});
-    } catch (error) {
-        res.json({success: false, message: error.message});
-    }
-}
-*/
 export const toggleLike = async (req, res) => {
     try {
-        const { blogId } = req.params;
-        const userId = req.user?.userId;
-        const userName = req.user?.name;
+          const { blogId } = req.params;
+          const userId = req.user._id;     // ✅ was req.user?.userId
+          const { userName } = req.body;
 
         if (!userId || !userName) {
             return res.json({ success: false, message: "Please login to like blogs" });
@@ -333,34 +236,12 @@ export const toggleLike = async (req, res) => {
         res.json({ success: false, message: error.message });
     }
 };
-
-export const getBlogLikes = async (req, res) => {
-    try {
-        const { blogId } = req.params;
-        
-        const blog = await Blog.findById(blogId)
-            .select('likes likesCount')
-            .populate('likes.user', 'name');
-
-        if (!blog) {
-            return res.json({ success: false, message: "Blog not found" });
-        }
-
-        res.json({ 
-            success: true, 
-            likes: blog.likes,
-            likesCount: blog.likesCount 
-        });
-
-    } catch (error) {
-        res.json({ success: false, message: error.message });
-    }
-};
+   
 
 export const checkUserLike = async (req, res) => {
     try {
         const { blogId } = req.params;
-        const userId = req.user?.userId;
+        const userId = req.id;
 
         if (!userId) {
             return res.json({ success: true, liked: false, likesCount: 0 });
@@ -406,35 +287,133 @@ export const togglePublishById = async (req, res) => {
     } catch (error) {
         res.json({success: false, message: error.message});
     }
-}
-/*
-export const getOwnBlogs = async(req,res) =>{
+};
+///////////////////////////////////////////////////////////////////////////
+export const likeBlog = async (req, res) => {
     try {
-        const userId = req.user;
+        const blogId = req.params.id;
+        const likeKrneWalaUserKiId = req.id;
+        const blog = await Blog.findById(blogId).populate({path:'likes'});
+        if (!blog) return res.status(404).json({ message: 'Blog not found', success: false })
 
-        if(!userId){
-            return res.status(400).json({message:"User ID is required."});
-        }
+        // Check if user already liked the blog
+        // const alreadyLiked = blog.likes.includes(userId);
 
-      const blogs = await Blog.find({author: userId}).populate({
-        path:'author',
-        select:'email'
-      }).populate({
-        path :'comments',
-        sort:{createAt: -1},
-        populate:{
-            path:'userId',
-            select:'email'
-        }
-      });
-      
-      if(!blogs) {
-        return res.status(404).json({message:"NO blogs found", blogs:[],success:false});
-      }
-     return res.status(200).json({blogs, success:true});
+        //like logic started
+        await blog.updateOne({ $addToSet: { likes: likeKrneWalaUserKiId } });
+        await blog.save();
+
+
+        return res.status(200).json({ message: 'Blog liked', blog, success: true });
     } catch (error) {
-     res.status(500).json({message:"Error featching blogs", error: error.message});
+        console.log(error);
+
     }
 }
 
-*/
+export const dislikeBlog = async (req, res) => {
+    try {
+        const likeKrneWalaUserKiId = req.id;
+        const blogId = req.params.id;
+        const blog = await Blog.findById(blogId);
+        if (!blog) return res.status(404).json({ message: 'post not found', success: false })
+
+        //dislike logic started
+        await blog.updateOne({ $pull: { likes: likeKrneWalaUserKiId } });
+        await blog.save();
+
+        return res.status(200).json({ message: 'Blog disliked', blog, success: true });
+    } catch (error) {
+        console.log(error);
+
+    }
+}
+
+export const getMyTotalBlogLikes = async (req, res) => {
+    try {
+      const userId = req.id; // assuming you use authentication middleware
+  
+      // Step 1: Find all blogs authored by the logged-in user
+      const myBlogs = await Blog.find({ author: userId }).select("likes");
+  
+      // Step 2: Sum up the total likes
+      const totalLikes = myBlogs.reduce((acc, blog) => acc + (blog.likes?.length || 0), 0);
+  
+      res.status(200).json({
+        success: true,
+        totalBlogs: myBlogs.length,
+        totalLikes,
+      });
+    } catch (error) {
+      console.error("Error getting total blog likes:", error);
+      res.status(500).json({
+        success: false,
+        message: "Failed to fetch total blog likes",
+      });
+    }
+  };
+
+export const getBlogCommentsByAuthor = async (req, res) => {
+  try {
+    const authorId = req.user._id; // logged-in user
+
+    // Step 1: Find all blogs that belong to this author
+    const authorBlogs = await Blog.find({ author: authorId }).select('_id');
+
+    if (!authorBlogs.length) {
+      return res.json({ success: false, message: "No blogs found for this author" });
+    }
+
+    // Extract blog IDs
+    const blogIds = authorBlogs.map(blog => blog._id);
+
+    // Step 2: Find all approved comments on those blogs
+    const comments = await Comment.find({ 
+      blog: { $in: blogIds }, 
+      isApproved: true 
+    })
+    .populate('blog', 'title') // shows which blog the comment belongs to
+    .select('name content blog createdAt')
+    .sort({ createdAt: -1 });
+
+    res.json({ success: true, comments });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+};
+
+export const approveComment = async (req, res) => {
+  try {
+    const { commentId } = req.params;
+
+    const comment = await Comment.findByIdAndUpdate(
+      commentId,
+      { isApproved: true },
+      { new: true }
+    );
+
+    if (!comment) {
+      return res.json({ success: false, message: "Comment not found" });
+    }
+
+    res.json({ success: true, message: "Comment approved", comment });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+};
+//////////////////////New comment ?/////////////////////////////
+export const addReply = async (req, res) => {
+  try {
+    const { commentId, content } = req.body;
+
+    const comment = await Comment.findById(commentId);
+    if (!comment) return res.json({ success: false, message: "Comment not found" });
+
+    comment.replies.push({ userId: req.user._id, content });
+    await comment.save();
+
+    res.json({ success: true, message: "Reply added" });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+};

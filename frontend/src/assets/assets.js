@@ -31,7 +31,11 @@ import dashboard_icon_1 from './dashboard_icon_1.svg'
 import dashboard_icon_2 from './dashboard_icon_2.svg'
 import dashboard_icon_3 from './dashboard_icon_3.svg'
 import dashboard_icon_4 from './dashboard_icon_4.svg'
-
+import My_blog_icon from './My_BLog_icon.svg'
+import like_icon from './like_icon.svg'
+import blog_logo from './bloggify-logo-v3.svg'
+import Login_illustration from './login-illustration.svg'
+import insta_logo from './instagram_icon.svg' 
 
 export const assets = {
     facebook_icon,
@@ -52,6 +56,11 @@ export const assets = {
     home_icon,
     gradientBackground,
     list_icon,
+    My_blog_icon,
+    like_icon,
+    blog_logo,
+    insta_logo,
+    Login_illustration,
     cross_icon,
     dashboard_icon_1,
     dashboard_icon_2,

@@ -19,13 +19,24 @@ const Dashboard = () => {
     const navigate = useNavigate();
 
 const fetchDashboard = async () => {
-             try {
-                   const { data } = await axios.get('/api/admin/dashboard')
-                   data.success ? setDashboardData(data.dashboardData) : toast.error(data.message)
-             } catch (error) {
-               toast.error(error.message)
-             }
-}
+  try {
+    // ✅ Get only YOUR blogs
+    const blogRes = await axios.get('/api/blog/my-blogs');
+    if (blogRes.data.success) {
+      const myBlogs = blogRes.data.blogs;
+
+      setDashboardData(prev => ({
+        ...prev,
+        recentBlogs: myBlogs,
+        blogs: myBlogs.length,                                    
+        drafts: myBlogs.filter(b => !b.isPublished).length,      
+        comments: prev.comments                                   
+      }));
+    }
+  } catch (error) {
+    toast.error(error.message);
+  }
+};
 
 useEffect(() => {
     fetchDashboard()
@@ -106,11 +117,23 @@ useEffect(() => {
                           <th scope='col' className='px-2 py-4'> Actions </th>
                          </tr>
                   </thead>
-                  <tbody>
-                    {dashboardData.recentBlogs.map((blog, index) => {
-                            return <BlogTableItem key={blog._id} blog={blog} fetchBlogs={fetchDashboard} index={index +1}/>
-                    })}
-                  </tbody>
+                 <tbody>
+  {dashboardData.recentBlogs.length === 0 ? (
+    <tr>
+      <td colSpan="5" className='text-center py-16 text-gray-400'>
+        <div className='flex flex-col items-center gap-2'>
+          <span className='text-4xl'>📝</span>
+          <p className='text-lg font-medium'>No blogs yet!</p>
+          <p className='text-sm'>Start writing your first blog and share your thoughts with the world.</p>
+        </div>
+      </td>
+    </tr>
+  ) : (
+    dashboardData.recentBlogs.map((blog, index) => (
+      <BlogTableItem key={blog._id} blog={blog} fetchBlogs={fetchDashboard} index={index + 1}/>
+    ))
+  )}
+</tbody>
                 </table>
           </div>
         </div>

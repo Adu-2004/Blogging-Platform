@@ -32,14 +32,24 @@ export const getAllBlogsAdmin = async (req, res) => {
 }
 
 export const getAllComments = async (req, res) => {
-    try {
-        const comments = await Comment.find({}).populate("blog").sort({createAt : -1});
-           res.json({success: true, comments});
-    } catch (error) {
-         res.json({success:false, message: error.message});
-    }
-}
+  try {
+    const authorId = req.user._id;  // ✅ get logged-in user
 
+    // Step 1: Find only this author's blogs
+    const authorBlogs = await Blog.find({ author: authorId }).select('_id');
+    const blogIds = authorBlogs.map((b) => b._id);
+
+    // Step 2: Find comments only on those blogs
+    const comments = await Comment.find({ blog: { $in: blogIds } })
+      .populate('userId', 'name')
+      .populate('blog', 'title')
+      .sort({ createdAt: -1 });
+
+    res.json({ success: true, comments });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+};
 export const getDashboard = async (req, res) => {
     try {
         const recentBlogs = await Blog.find({}).sort({createAt: -1}).limit(5);
@@ -74,7 +84,7 @@ export const approveCommentById = async (req, res) => {
         res.json({success:false, message: error.message});
     }
 }
-/////////////////////////////////////////////
+
 export const getAllUsers = async (req, res) => {
     try {
         const users = await User.find({})

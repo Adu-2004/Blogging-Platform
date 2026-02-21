@@ -1,4 +1,4 @@
-import { children, createContext, useState, useEffect, useContext } from "react";
+import {  createContext, useState, useEffect, useContext } from "react";
 import axios from 'axios'
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -17,6 +17,7 @@ export const AppProvider = ({ children}) => {
    const fetchBlogs = async () => {
     try {
      const {data } = await axios.get('/api/blog/all');
+      console.log(data);
         data.success ? setBlogs(data.blogs) : toast.error(data.message);
     } catch (error) {
         toast.error(error.message);
@@ -28,8 +29,9 @@ export const AppProvider = ({ children}) => {
         const token = localStorage.getItem('token')
         if(token){
         setToken(token);
-        axios.defaults.headers.common['Authorization'] = `${token}`;
-    }
+        
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    }  
    }, [])
 
         const value ={
