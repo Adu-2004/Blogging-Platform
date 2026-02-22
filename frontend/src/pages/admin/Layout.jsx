@@ -32,7 +32,7 @@ const Layout = () => {
         <img
           src={assets.blog_logo}
           alt=''
-          className='w-32 sm:w-60 cursor-pointer'
+          className='w-50 sm:w-60 cursor-pointer'
           onClick={() => navigate('/')}
         />
         
