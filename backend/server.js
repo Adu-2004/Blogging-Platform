@@ -29,8 +29,10 @@ app.use('/api/chat',router);
 
 const PORT = process.env.PORT || 8080;
 
+if (process.env.NODE_ENV !== 'production') {
 app.listen(PORT, () => {
     console.log(`Server is running on ${PORT}`);
 });
+};
 
 export default app;
