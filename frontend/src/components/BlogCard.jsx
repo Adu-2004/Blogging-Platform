@@ -23,13 +23,13 @@ const BlogCard = ({ blog }) => {
   }
 
   return (
-    <div onClick={() => navigate(`/blog/${_id}`)} className='w-full rounded-lg overflow-hidden shadow hover:scale-102 hover:shadow-blue-100 duration-300 cursor-pointe bg-white border-2 border-white'>
-      <img src={image} alt='' className='aspect-video' />
-      <span className='ml-5 mt-4 px-3 py-1 inline-block bg-blue-200 rounded-full text-blue text-xs'>{category}</span>
-      <div className='p-5'>
+    <div onClick={() => navigate(`/blog/${_id}`)} className='w-full rounded-lg overflow-hidden shadow hover:scale-102 hover:shadow-blue-100 duration-300 cursor-pointe bg-white border-2 border-white flex flex-col'>
+      <img src={image} alt='' className='w-full h-48 object-cover' />
+      <span className='ml-5 mt-4 w-fit mb-2 px-3 py-1 inline-block bg-blue-200 rounded-full text-blue text-xs'>{category}</span>
+      <div className='p-5 flex flex-col flex-1'>
         <h5 className='mb-2 font-medium text-gray-900'>{title}</h5>
         <p className='mb-3 text-xs text-gray-600' dangerouslySetInnerHTML={{ "__html": description.slice(0, 80) }}></p>
-        <div className='flex items-center justify-between border-t border-gray-105 pt-3 mt-3 text-xs text-gray-500'>
+        <div className='flex items-center justify-between border-t border-gray-105 pt-3 mt-auto text-xs text-gray-500'>
           <p>By <span className='font-semibold text-gray-700'>{blog?.author?.name || 'Admin'}</span></p>
           <p>{Moment(blog?.createdAt).format('MMM Do YYYY')}</p>
         </div>
@@ -37,5 +37,5 @@ const BlogCard = ({ blog }) => {
     </div>
   )
 }
-
+////////////////////////////////////////////////////////////////////////////
 export default BlogCard

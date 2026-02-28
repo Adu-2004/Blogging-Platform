@@ -144,11 +144,9 @@ const Blog = () => {
       </div>
 
       <div className='mx-5 max-w-5xl md:mx-auto my-10 mt-6'>
-        <img src={data.image} alt='' className='rounded-3xl mb-5' />
+        <img src={data.image} alt='' className='rounded-3xl mb-5 w-full max-h-[500px] object-contain' />
         <div className='rich-text max-w-3xl mx-auto' dangerouslySetInnerHTML={{ __html: data.description }}></div>
-     
-     
-
+        
         {/* Comments Section */}
         <div className='mt-14 mb-9 max-w-3xl mx-auto'>
           <BlogLike blogId={data._id} initialLikes={data.likes || []} />

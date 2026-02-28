@@ -40,7 +40,7 @@ const BlogBotChatbot = () => {
     },
     tooltip: {
       mode: "ALWAYS",
-      text: "💡 Need blog ideas?",
+      text: "Hey! 👋",
     },
     chatHistory: {
       disabled: false,
