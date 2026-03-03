@@ -3,7 +3,7 @@
 <br/>
 
 <picture>
-  <img src="./bloggify-logo-v3.svg" alt="AI-Bloggify" width="300" height="auto" />
+  <img src="./frontend/src/assets/bloggify-logo-v3.svg" alt="AI-Bloggify" width="300" height="auto" />
 </picture>
 
 <br/><br/>
