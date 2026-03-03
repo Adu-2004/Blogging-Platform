@@ -1,23 +1,44 @@
 <div align="center">
 
-```
- █████╗ ██╗      ██████╗ ██╗      ██████╗  ██████╗ ██╗███████╗██╗   ██╗
-██╔══██╗██║     ██╔═══██╗██║     ██╔════╝ ██╔════╝ ██║██╔════╝╚██╗ ██╔╝
-███████║██║     ██║   ██║██║     ██║  ███╗██║  ███╗██║█████╗   ╚████╔╝ 
-██╔══██║██║     ██║   ██║██║     ██║   ██║██║   ██║██║██╔══╝    ╚██╔╝  
-██║  ██║███████╗╚██████╔╝███████╗╚██████╔╝╚██████╔╝██║██║        ██║   
-╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝╚═╝        ╚═╝   
-```
+<br/>
 
-### ✦ Write Smarter. Publish Faster. Stand Out. ✦
+<picture>
+  <img src="./bloggify-logo-v3.svg" alt="AI-Bloggify" width="300" height="auto" />
+</picture>
 
-[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-Visit_Now-6366f1?style=for-the-badge&logoColor=white)](https://blogging-platform-frontend-61j4.onrender.com/)
+<br/><br/>
+
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td align="center">
+      <img src="https://img.shields.io/badge/-%F0%9F%A4%96%20AI%20POWERED-1D4ED8?style=for-the-badge&logoColor=white&labelColor=1e3a8a" />
+      &nbsp;
+      <img src="https://img.shields.io/badge/-%E2%9C%8D%EF%B8%8F%20SMART%20EDITOR-0ea5e9?style=for-the-badge&logoColor=white&labelColor=0369a1" />
+      &nbsp;
+      <img src="https://img.shields.io/badge/-%F0%9F%9A%80%20INSTANT%20PUBLISH-10b981?style=for-the-badge&logoColor=white&labelColor=065f46" />
+    </td>
+  </tr>
+</table>
+
+<br/>
+
+<h3>
+  <code>&lt; Where Artificial Intelligence Meets Human Creativity /&gt;</code>
+</h3>
+
+<br/>
+
+[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-Visit_Now-1D4ED8?style=for-the-badge&logoColor=white)](https://blogging-platform-frontend-61j4.onrender.com/)
+&nbsp;
 ![Made with Love](https://img.shields.io/badge/Made_with-❤️_&_AI-ff6b6b?style=for-the-badge)
-![Status](https://img.shields.io/badge/Status-Active-22c55e?style=for-the-badge)
+&nbsp;
+![Status](https://img.shields.io/badge/Status-🟢_Live-22c55e?style=for-the-badge)
 
 <br/>
 
 > *"The blank page is no longer your enemy."*
+
+<br/>
 
 </div>
 
